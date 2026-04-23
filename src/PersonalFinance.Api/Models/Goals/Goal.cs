@@ -15,6 +15,7 @@ namespace PersonalFinance.Api.Models.Goals;
 /// </list>
 /// </remarks>
 /// 
+
 public class Goal
 {
     [Key]
