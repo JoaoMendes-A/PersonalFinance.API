@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using PersonalFinance.Api.Data;
 using PersonalFinance.Api.Models.Transactions;
 using System.Data;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace PersonalFinance.Api.Services.Goals;
 

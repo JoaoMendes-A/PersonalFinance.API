@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace PersonalFinance.Api.Models.User;
+namespace PersonalFinance.Api.Models.Users;
 
 public class User()
 {

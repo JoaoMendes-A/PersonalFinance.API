@@ -216,5 +216,3 @@ public class FinancialService : IFinancialService
         return summaryDto;
     }
 }
-
-
