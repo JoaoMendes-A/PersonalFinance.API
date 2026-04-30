@@ -29,7 +29,7 @@ public class AuthServices : IAuthServices
         return user;
     }
 
-    public async Task<User?> ValidateLogin(string email, string password)
+    public async Task<User?> Login(string email, string password)
     {
 
     var user = await _context.Users
@@ -48,5 +48,10 @@ public class AuthServices : IAuthServices
     }
 
     return user;
+    }
+
+    public async Task<User?> GetUserById(int id)
+    {
+        return await _context.Users.FindAsync(id);
     }
 }
