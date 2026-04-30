@@ -2,14 +2,20 @@ using PersonalFinance.Api.Services.Transactions;
 using PersonalFinance.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using PersonalFinance.Api.Services.Goals;
+using PersonalFinance.Api.Services.Auth;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IGoalServices, GoalServices>();
+
+builder.Services.AddControllers();
+builder.Services.AddScoped<IAuthServices, AuthServices>();
 
 // global logging
 

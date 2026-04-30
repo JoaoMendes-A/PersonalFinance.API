@@ -3,8 +3,6 @@ using PersonalFinance.Api.Models.Users;
 using PersonalFinance.Api.Data;
 using Microsoft.EntityFrameworkCore;
 
-
-
 namespace PersonalFinance.Api.Services.Auth;
 
 public class AuthServices : IAuthServices
@@ -15,10 +13,18 @@ public class AuthServices : IAuthServices
         _context = context;
     }
 
+    /// <summary>
+    /// Converete a senha em hash
+    /// </summary>
+    
     private string ConvertToHash(string password)
     {
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
+
+    /// <summary>
+    /// Registra novo usuario
+    /// </summary>
 
     public async Task<User> RegisterUser(User user, string password)
     {
@@ -28,6 +34,10 @@ public class AuthServices : IAuthServices
 
         return user;
     }
+
+    /// <summary>
+    /// Valida login de usuario 
+    /// </summary>
 
     public async Task<User?> Login(string email, string password)
     {
@@ -49,6 +59,10 @@ public class AuthServices : IAuthServices
 
     return user;
     }
+
+    /// <summary>
+    /// Retorna um usuario filtrada pelo ID
+    /// </summary>
 
     public async Task<User?> GetUserById(int id)
     {

@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PersonalFinance.Api.Controllers.Auth;
 
+/// <summary>
+/// Controller responsável por gerenciar os usuarios da API.
+/// </summary>
 
 [ApiController]
 [Route("api/[controller]")]
@@ -20,6 +23,7 @@ public class AuthController : ControllerBase
         _context = context;
     }
 
+    [HttpPost("register")]
     public async Task<IActionResult> RegisterUser(CreateUserDto dto)
     {
         var user = new User
@@ -32,6 +36,7 @@ public class AuthController : ControllerBase
         return Created("", registerUser);
     }
 
+    [HttpPost("login")]
     public async Task<IActionResult> Login(string email, string password)
     {
         var validateLogin = await _authServices.Login(email, password);
@@ -39,9 +44,10 @@ public class AuthController : ControllerBase
         if (validateLogin == null)
         return NotFound();
 
-        return Ok();
+        return Ok("aprovado");
     }
 
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var user = _authServices.GetUserById(id);
