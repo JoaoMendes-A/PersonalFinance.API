@@ -3,7 +3,11 @@ using PersonalFinance.Api.Models.Users;
 using PersonalFinance.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http.HttpResults;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text;
 
 namespace PersonalFinance.Api.Services.Auth;
 
@@ -41,29 +45,45 @@ public class AuthServices : IAuthServices
     /// Valida login de usuario 
     /// </summary>
 
-    public async Task<User?> Login(string email, string password)
+    public async Task<string?> Login(string email, string password)
     {
-
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Email == email);
 
         if (user == null)
             return null;
-        
 
         bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.HashPassword);
 
         if (!isPasswordValid)
             return null;
         
+        var token = GenerateToken(user.Email, user.Id);
 
-        var claims = new[]
+        return token;
+    }
+
+    public string GenerateToken(string email, int userId)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        var key = Encoding.ASCII.GetBytes("Minha_Chave_Ultra_Secreta_Com_Mais_De_32_Caracteres_Esta_Aqui");
+
+        var tokenDescription = new SecurityTokenDescriptor
         {
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+            Subject = new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
+            }),
+            Expires = DateTime.UtcNow.AddHours(3),
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature)
         };
-
-        var identity = new ClaimsIdentity(claims, "Cookies");
+        
+        var token = tokenHandler.CreateToken(tokenDescription);
+        return tokenHandler.WriteToken(token);
     }
 
     /// <summary>
