@@ -1,7 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace PersonalFinance.Api.DTOs.User;
+namespace PersonalFinance.Api.DTOs.Auth;
 
 public class CreateUserDto{
 

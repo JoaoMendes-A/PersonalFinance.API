@@ -1,6 +1,6 @@
 using PersonalFinance.Api.Data;
 using PersonalFinance.Api.Services.Auth;
-using PersonalFinance.Api.DTOs.User;
+using PersonalFinance.Api.DTOs.Auth;
 using PersonalFinance.Api.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,7 +44,7 @@ public class AuthController : ControllerBase
         if (validateLogin == null)
         return NotFound();
 
-        return Ok("aprovado");
+        return Ok("approved");
     }
 
     [HttpGet("{id}")]

@@ -5,7 +5,6 @@ using PersonalFinance.Api.Services.Goals;
 using PersonalFinance.Api.Services.Auth;
 
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();

@@ -2,6 +2,8 @@ using BCrypt.Net;
 using PersonalFinance.Api.Models.Users;
 using PersonalFinance.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace PersonalFinance.Api.Services.Auth;
 
@@ -42,22 +44,26 @@ public class AuthServices : IAuthServices
     public async Task<User?> Login(string email, string password)
     {
 
-    var user = await _context.Users
-        .FirstOrDefaultAsync(u => u.Email == email);
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == email);
 
-    if (user == null)
-    {
-        return null;
-    }
+        if (user == null)
+            return null;
+        
 
-    bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.HashPassword);
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.HashPassword);
 
-    if (!isPasswordValid)
-    {
-        return null;
-    }
+        if (!isPasswordValid)
+            return null;
+        
 
-    return user;
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+        };
+
+        var identity = new ClaimsIdentity(claims, "Cookies");
     }
 
     /// <summary>
